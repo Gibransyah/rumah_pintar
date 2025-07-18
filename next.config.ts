@@ -1,7 +1,7 @@
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
-  /* config options here */
-};
+const nextConfig = {
+  experimental: {
+    serverActions: true,
+  },
+} as unknown as import("next").NextConfig;
 
 export default nextConfig;

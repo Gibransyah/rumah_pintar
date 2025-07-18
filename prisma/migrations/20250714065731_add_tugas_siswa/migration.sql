@@ -1,0 +1,12 @@
+-- CreateTable
+CREATE TABLE `TugasSiswa` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `siswaId` INTEGER NOT NULL,
+    `fileUrl` VARCHAR(191) NOT NULL,
+    `uploadedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- AddForeignKey
+ALTER TABLE `TugasSiswa` ADD CONSTRAINT `TugasSiswa_siswaId_fkey` FOREIGN KEY (`siswaId`) REFERENCES `Siswa`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;

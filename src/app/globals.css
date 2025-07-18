@@ -5,6 +5,10 @@
   --foreground: #171717;
 }
 
+/* @theme inline block is not standard CSS/Tailwind,
+   if it's part of a custom setup, keep it.
+   Otherwise, it might be a typo or unused.
+   Assuming it's intentional for a specific theme setup. */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -23,4 +27,39 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Gaya dasar untuk input yang Anda tetapkan dengan Tailwind */
+.input {
+  @apply w-full p-2 border border-gray-300 rounded;
+}
+
+/* Mengatur warna placeholder */
+input::placeholder {
+  color: #6b7280; /* Tailwind gray-500 */
+  opacity: 1; /* Pastikan placeholder terlihat jelas */
+}
+
+/* --- BAGIAN PENTING UNTUK AUTOFILL --- */
+/* Menargetkan input yang diisi otomatis oleh browser (-webkit-autofill) */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  /* Menggunakan box-shadow inset untuk menutupi latar belakang autofill yang abu-abu */
+  /* Ganti 'white' jika latar belakang input Anda bukan putih */
+  -webkit-box-shadow: 0 0 0px 1000px var(--background) inset !important;
+  /* Mengatur warna teks yang diisi otomatis */
+  /* Ganti '#111827' jika warna teks input Anda berbeda dari gray-900 */
+  -webkit-text-fill-color: var(--foreground) !important;
+  /* Memastikan background-color dan color juga diatur */
+  background-color: var(--background) !important;
+  color: var(--foreground) !important;
+  /* Opsional: Tambahkan transisi jika Anda ingin efek halus */
+  transition: background-color 5000s ease-in-out 0s, color 5000s ease-in-out 0s;
+}
+
+/* Baris pertama teks yang di-autofill (mungkin tidak selalu diperlukan jika box-shadow sudah bekerja) */
+input:-webkit-autofill::first-line {
+  color: var(--foreground) !important; /* Tailwind gray-900, disesuaikan dengan --foreground */
 }

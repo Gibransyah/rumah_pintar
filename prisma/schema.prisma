@@ -1,0 +1,89 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       Int       @id @default(autoincrement())
+  email    String    @unique
+  password String
+  role     Role
+  siswa    Siswa?
+  pengajar Pengajar?
+}
+
+model Siswa {
+  id     Int     @id @default(autoincrement())
+  userId Int     @unique
+  nama   String
+  kelas  String
+  user   User    @relation(fields: [userId], references: [id])
+  nilai  Nilai[] // Tambahkan relasi ke Nilai
+  tugas TugasSiswa[]
+}
+
+model Pengajar {
+  id            Int    @id @default(autoincrement())
+  userId        Int    @unique
+  nama          String
+  mataPelajaran String
+  user          User   @relation(fields: [userId], references: [id])
+
+  jadwal Jadwal[]
+  materi Materi[]
+  nilai  Nilai[] // Tambahkan relasi ke Nilai
+}
+
+model Jadwal {
+  id            Int    @id @default(autoincrement())
+  hari          String
+  jamMulai      String
+  jamSelesai    String
+  mataPelajaran String
+  pengajarId    Int
+  kelas         String
+
+  pengajar Pengajar @relation(fields: [pengajarId], references: [id])
+}
+
+model Materi {
+  id         Int      @id @default(autoincrement())
+  judul      String
+  deskripsi  String
+  fileUrl    String
+  pengajarId Int
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  pengajar Pengajar @relation(fields: [pengajarId], references: [id])
+}
+
+model Nilai {
+  id            Int    @id @default(autoincrement())
+  siswaId       Int
+  pengajarId    Int
+  mataPelajaran String
+  nilai         Float
+
+  siswa    Siswa    @relation(fields: [siswaId], references: [id])
+  pengajar Pengajar @relation(fields: [pengajarId], references: [id])
+}
+
+model TugasSiswa {
+  id         Int      @id @default(autoincrement())
+  siswaId    Int
+  fileUrl    String
+  uploadedAt DateTime @default(now())
+
+  siswa Siswa @relation(fields: [siswaId], references: [id])
+}
+
+enum Role {
+  ADMIN
+  PENGAJAR
+  SISWA
+}
