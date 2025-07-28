@@ -3,7 +3,7 @@ const nextConfig = {
     serverActions: true,
   },
   eslint: {
-    ignoreDuringBuilds: true, // ✅ Tambahkan ini untuk melewati error ESLint saat build
+    ignoreDuringBuilds: true,
   },
 } as unknown as import("next").NextConfig;
 
