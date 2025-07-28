@@ -12,65 +12,68 @@ model User {
   email    String    @unique
   password String
   role     Role
-  siswa    Siswa?
   pengajar Pengajar?
+  siswa    Siswa?
 }
 
 model Siswa {
-  id     Int     @id @default(autoincrement())
-  userId Int     @unique
+  id     Int          @id @default(autoincrement())
+  userId Int          @unique
   nama   String
   kelas  String
-  user   User    @relation(fields: [userId], references: [id])
-  nilai  Nilai[] // Tambahkan relasi ke Nilai
-  tugas TugasSiswa[]
+  nilai  Nilai[]
+  user   User         @relation(fields: [userId], references: [id])
+  tugas  TugasSiswa[]
 }
 
 model Pengajar {
-  id            Int    @id @default(autoincrement())
-  userId        Int    @unique
+  id            Int      @id @default(autoincrement())
+  userId        Int      @unique
   nama          String
   mataPelajaran String
-  user          User   @relation(fields: [userId], references: [id])
-
-  jadwal Jadwal[]
-  materi Materi[]
-  nilai  Nilai[] // Tambahkan relasi ke Nilai
+  jadwal        Jadwal[]
+  materi        Materi[]
+  nilai         Nilai[]
+  user          User     @relation(fields: [userId], references: [id])
 }
 
 model Jadwal {
-  id            Int    @id @default(autoincrement())
+  id            Int      @id @default(autoincrement())
   hari          String
   jamMulai      String
   jamSelesai    String
   mataPelajaran String
   pengajarId    Int
   kelas         String
+  pengajar      Pengajar @relation(fields: [pengajarId], references: [id])
 
-  pengajar Pengajar @relation(fields: [pengajarId], references: [id])
+  @@index([pengajarId], map: "Jadwal_pengajarId_fkey")
 }
 
 model Materi {
   id         Int      @id @default(autoincrement())
   judul      String
   deskripsi  String
-  fileUrl    String
   pengajarId Int
   createdAt  DateTime @default(now())
+  fileUrl    String
   updatedAt  DateTime @updatedAt
+  pengajar   Pengajar @relation(fields: [pengajarId], references: [id])
 
-  pengajar Pengajar @relation(fields: [pengajarId], references: [id])
+  @@index([pengajarId], map: "Materi_pengajarId_fkey")
 }
 
 model Nilai {
-  id            Int    @id @default(autoincrement())
+  id            Int      @id @default(autoincrement())
   siswaId       Int
   pengajarId    Int
   mataPelajaran String
   nilai         Float
+  pengajar      Pengajar @relation(fields: [pengajarId], references: [id])
+  siswa         Siswa    @relation(fields: [siswaId], references: [id])
 
-  siswa    Siswa    @relation(fields: [siswaId], references: [id])
-  pengajar Pengajar @relation(fields: [pengajarId], references: [id])
+  @@index([pengajarId], map: "Nilai_pengajarId_fkey")
+  @@index([siswaId], map: "Nilai_siswaId_fkey")
 }
 
 model TugasSiswa {
@@ -78,8 +81,9 @@ model TugasSiswa {
   siswaId    Int
   fileUrl    String
   uploadedAt DateTime @default(now())
+  siswa      Siswa    @relation(fields: [siswaId], references: [id])
 
-  siswa Siswa @relation(fields: [siswaId], references: [id])
+  @@index([siswaId], map: "TugasSiswa_siswaId_fkey")
 }
 
 enum Role {
