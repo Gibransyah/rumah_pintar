@@ -1,3 +1,4 @@
+/** @type {import('next').NextConfig} */
 const nextConfig = {
   experimental: {
     serverActions: true,
@@ -5,6 +6,6 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
-} as unknown as import("next").NextConfig;
+};
 
 export default nextConfig;
